@@ -1,0 +1,183 @@
+; Filename: Test networks/ky6_mod.inp
+; WNTR: 0.4.2
+; Created: 2022-08-24 10:17:09
+[TITLE]
+
+[JUNCTIONS]
+;ID                      Elevation       Demand Pattern                 
+ J-114                       747.5352     346.0448371 1                          ;
+ J-476                       762.0748    374.38079352 1                          ;
+ J-94                        805.8963    238.14349914 1                          ;
+ O-Pump-2                    631.8012    55.146720467 1                          ;
+ I-RV-1                      604.3511    101.08414977 1                          ;
+ I-Pump-2                    631.8012               0 1                          ;
+ O-RV-1                      604.3511            23.3 1                          ;
+
+[RESERVOIRS]
+;ID                                   Head                  Pattern
+ R-2                           628.96                            ;
+
+[TANKS]
+;ID                              Elevation           Init Level            Min Level            Max Level             Diameter           Min Volume Volume Curve         Overflow            
+ T-1                         762.5445        132.4555        117.4555        142.4555              58               0                                             ;
+ T-2                         740.2293        149.7707        144.7707        164.7707              65               0                                             ;
+ T-3                         825.6524         74.3476         64.3476         99.3476              31               0                                             ;
+
+[PIPES]
+;ID                   Node1                Node2                              Length             Diameter            Roughness           Minor Loss               Status
+ P-215                J-114                T-2                           326.17              16             150               0                 Open   ;
+ P-414                T-1                  J-476                          89.19              10             150               0                 Open   ;
+ P-52                 J-94                 T-3                           418.76              10             150               0                 Open   ;
+ P-558                I-Pump-2             R-2                           111.48              16             100               0                 Open   ;
+ P-560                R-2                  I-Pump-2                     113.699              10             150               0                 Open   ;
+ new-pipe-401         I-RV-1               O-Pump-2                626.80529128    8.0013381115             100               0                 Open   ;
+ new-pipe-451         J-476                O-Pump-2                626.80529128    4.1941998969             100               0                 Open   ;
+ new-pipe-452         J-476                I-RV-1                  626.80529128     6.414044318             100               0                 Open   ;
+ new-pipe-564         J-94                 J-476                   626.80529128    7.2761945144             100               0                 Open   ;
+ new-pipe-565         J-94                 O-Pump-2                626.80529128    3.6443522204             100               0                 Open   ;
+ new-pipe-566         J-94                 I-RV-1                  626.80529128    5.6522955015             100               0                 Open   ;
+ new-pipe-567         J-114                O-Pump-2                626.80529128    1.4110790356             100               0                 Open   ;
+ new-pipe-568         J-114                I-RV-1                  626.80529128    2.1498305095             100               0                 Open   ;
+ new-pipe-569         J-114                J-476                   626.80529128    6.6577532797             100               0                 Open   ;
+ new-pipe-570         J-114                J-94                    626.80529128      6.02399744             100               0                 Open   ;
+
+[PUMPS]
+;ID                   Node1                Node2                Properties          
+ ~@Pump-2             I-Pump-2             O-Pump-2             HEAD     2                      ;
+
+[VALVES]
+;ID                   Node1                Node2                            Diameter Type              Setting           Minor Loss
+ ~@RV-1               I-RV-1               O-RV-1                          1000 PRV            99.99               0   ;
+
+[TAGS]
+;type      name       tag       
+
+[DEMANDS]
+;ID        Demand     Pattern   
+
+[STATUS]
+;ID        Setting   
+
+[PATTERNS]
+;ID        Multipliers
+
+1 0.330000 0.250000 0.209000 0.209000 0.259000 0.360000
+1 0.529000 0.910000 1.200000 1.299000 1.340000 1.340000
+1 1.320000 1.269000 1.250000 1.250000 1.279000 1.370000
+1 1.519000 1.700000 1.750000 1.669000 0.899000 0.479000
+
+2 1.000000
+
+3 0.165000 0.125000 0.105000 0.105000 0.130000 0.180000
+3 0.265000 0.455000 0.600000 0.650000 0.670000 0.670000
+3 0.660000 0.635000 0.625000 0.625000 0.640000 0.685000
+3 0.760000 0.850000 0.875000 0.835000 0.450000 0.240000
+
+ENRG1 1.000000 1.000000 1.000000 1.000000 1.000000 1.000000
+ENRG1 1.000000 1.000000 1.000000 1.000000 1.000000 1.000000
+ENRG1 1.000000 1.000000 1.000000 1.000000 1.000000 1.000000
+ENRG1 1.000000 1.000000 1.000000 1.000000 1.000000
+
+5 1.000000
+
+[CURVES]
+;ID         X-Value      Y-Value     
+;PUMP: 2
+ 2           1561.410000   316.700000   ;
+
+
+[CONTROLS]
+Pump ~@Pump-2 Open IF Tank T-2 below 149.77
+Pump ~@Pump-2 Closed IF Tank T-2 above 164.77
+
+[RULES]
+
+[ENERGY]
+GLOBAL EFFICIENCY      75.0000
+GLOBAL PRICE           0.0000
+DEMAND CHARGE          0.0000
+GLOBAL PATTERN         ENRG1
+
+[EMITTERS]
+;ID        Flow coefficient
+
+[QUALITY]
+
+[SOURCES]
+;Node      Type       Quality    Pattern   
+
+[REACTIONS]
+;Type           Pipe/Tank               Coefficient
+
+ ORDER BULK 1
+ ORDER TANK 1
+ ORDER WALL 1
+ GLOBAL BULK -0.5000   
+ GLOBAL WALL -1.0000   
+ LIMITING POTENTIAL 0.0000    
+ ROUGHNESS CORRELATION 0.0000    
+
+[MIXING]
+;Tank ID             Model Fraction
+
+[TIMES]
+DURATION             24:00:00
+HYDRAULIC TIMESTEP   00:30:00
+QUALITY TIMESTEP     00:05:00
+PATTERN TIMESTEP     01:00:00
+PATTERN START        00:00:00
+REPORT TIMESTEP      00:30:00
+REPORT START         00:00:00
+START CLOCKTIME      00:00:00 AM
+RULE TIMESTEP        00:06:00
+STATISTIC            NONE      
+
+[REPORT]
+STATUS     FULL
+SUMMARY    NO
+PAGE       0
+
+[OPTIONS]
+UNITS                GPM                 
+HEADLOSS             H-W                 
+SPECIFIC GRAVITY     1
+VISCOSITY            1
+TRIALS               40
+ACCURACY             0.0001
+CHECKFREQ            2
+MAXCHECK             10
+UNBALANCED           STOP                
+PATTERN              1                   
+DEMAND MULTIPLIER    1
+EMITTER EXPONENT     0.5
+QUALITY              AGE                 
+DIFFUSIVITY          1
+TOLERANCE            0.01
+
+[COORDINATES]
+;Node      X-Coord    Y-Coord   
+J-114         4766840.510000000    3698775.000000000
+J-476         4763324.960000000    3703034.000000000
+J-94          4760308.870000000    3701416.000000000
+O-Pump-2      4736373.210000000    3729249.000000000
+I-RV-1        4754360.580000000    3709497.000000000
+I-Pump-2      4736373.210000000    3729249.000000000
+O-RV-1        4754360.580000000    3709497.000000000
+R-2           4736263.000000000    3729270.000000000
+T-1           4763334.000000000    3702949.000000000
+T-2           4767165.000000000    3698746.000000000
+T-3           4760522.000000000    3701060.000000000
+
+[VERTICES]
+;Link      X-Coord    Y-Coord   
+P-215         4766974.010000000    3698764.510000000
+P-560         4736370.520000000    3729254.550000000
+
+[LABELS]
+
+[BACKDROP]
+DIMENSIONS    4734324.900    3691493.200    4779387.820    3731770.800
+UNITS    NONE
+OFFSET    0.00    0.00
+
+[END]
