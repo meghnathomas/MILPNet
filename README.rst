@@ -25,7 +25,7 @@ The file :code:`apply_milpnet.py` takes in a .INP file of a WDS network model an
 
 The Networks folder includes 9 benchmark networks for testing and validation. The original network names, modifications, and sources are as follows:
 
-.. list-table:: Title
+.. list-table:: 
    :header-rows: 1
 
    * - Network
