@@ -14,7 +14,9 @@ MILPNet extracts WDS network topology and system boundary conditions (e.g., rese
 The file :code:`set_up_milpnet.py` builds an optimization problem using the `run_gurobi` function with the following components:
 
 decision variables: heads of junctions and tanks, flow rates of pipes, pumps, GVs, and PRVs, status of pumps, GVs, and tank-links (open/closed), status of PRVs (active/open/closed)
+
 objective function: 0
+
 constraints: system hydraulics, hydraulic devices, status checks, control rules
 
 The non-linear pipe head loss equation (based on the Hazen-Williams equation) and pump head gain equations are approximated using piece-wise linear segments. 
