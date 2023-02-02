@@ -23,7 +23,7 @@ MILPNet employs Gurobi's in-built piece-wise linearization, indicator, and AND/O
 
 The file :code:`apply_milpnet.py` takes in a .INP file of a WDS network model and the number of time steps in a simulation duration (other inputs to the `run_gurobi` function can be specified as well if desired) and solves the optimization problem. Plots comparing the MILPNet optimization results to EPANET results (through WNTR) are displayed to highlight modeling accuracy.
 
-The Networks folder includes 9 benchmark networks for testing and validation. The original network names, modifications, and sources are as follows:
+The Networks folder includes 8 benchmark networks for testing and validation. The original network names, modifications, and sources are as follows:
 
 .. list-table:: 
    :header-rows: 1
