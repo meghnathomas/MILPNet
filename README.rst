@@ -7,7 +7,7 @@ MILPNet is a Mixed-Integer Linear Programming framework for water distribution s
 1. system hydraulics (i.e., mass balance equations and energy conservation equations)
 2. hydraulic devices (e.g., storage tanks, pumps, pressure-reducing valves (PRVs), and gate valves (GVs))
 3. status checks (e.g., preventing flow into/out of a tank if it is full/empty)
-4. event-based and time-based control rules)
+4. event-based and time-based control rules
 
 MILPNet extracts WDS network topology and system boundary conditions (e.g., reservoir heads, junction demands, initial tank level, etc.) from a .INP file of a WDS model using the Python package **WNTR**. The **Gurobi (v 9.5.1) Python API** is used to formulate and solve an extended period optimization problem for WDSs. 
 
@@ -34,35 +34,35 @@ The Networks folder includes 8 benchmark networks for testing and validation. Th
      - Original Name
      - Modification
      - Source
-   * - A-NET
+   * - ANET
      - Net1
      - None
      - `Rossman et al (2020)`_
-   * - B-NET
+   * - BNET
      - Net2
      - None
      -  `Rossman et al (1994)`_ 
-   * - C-NET
+   * - CNET
      - Net2
      - Added open PRV
      -  `Rossman et al (1994)`_ 
-   * - D-NET
+   * - DNET
      - Net2
      - Added active + closed PRV
      -  `Rossman et al (1994)`_ 
-   * - E-NET
+   * - ENET
      - CA1
      - None
      -  `Rossman and Boulos (1996)`_
-   * - F-NET
+   * - FNET
      - PA2
      - None
      -  `Vasconcelos et al. (1997)`_
-   * - G-NET
+   * - GNET
      - Net3
      - Created a reduced model using `MAGNets`_ (max_nodal_degree =2)    
      -  `Clark et al. (1995)`_
-   * - H-NET
+   * - HNET
      - ky6
      - Created a fully reduced model using `MAGNets`_ and replaced power pump with head pump  
      -  `Jolly et al. (2014)`_
