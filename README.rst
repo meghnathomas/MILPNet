@@ -2,6 +2,9 @@
 MILPNet 
 =========
 
+.. image:: https://zenodo.org/badge/537493014.svg
+   :target: https://zenodo.org/badge/latestdoi/537493014
+
 MILPNet is a Mixed-Integer Linear Programming framework for water distribution system (WDS) optimization problems. MILPNet models the following aspects of WDSs:
 
 1. system hydraulics (i.e., mass balance equations and energy conservation equations)
