@@ -877,15 +877,12 @@ def run_gurobi(inp_file, no_ts = 3, num_pipe_seg = 3, num_pump_seg = 5, RELAX = 
             y_tanks[i] = m.addMVar(u_tank_count, vtype = GRB.BINARY, name = "y tanks {}".format(i))
             z1_inlet[i] = m.addMVar(u_tank_count, vtype = GRB.BINARY, name = "z1_inlet {}".format(i))
             z2_inlet[i] = m.addMVar(u_tank_count, vtype = GRB.BINARY, name = "z2_inlet {}".format(i))
-            z3_inlet[i] = m.addMVar(u_tank_count, vtype = GRB.BINARY, name = "z3_inlet {}".format(i))
-            z4_inlet[i] = m.addMVar(u_tank_count, vtype = GRB.BINARY, name = "z4_inlet {}".format(i))
         
         for i in range(u_tank_count):
             m.addConstr(y_tanks[0][i] == 0) ####### edit this at some point! to reflect actual starting
             m.addConstr(u_tanks[0][i] == 0)
             m.addConstr(z1_inlet[0][i] == 0)
             m.addConstr(z2_inlet[0][i] == 1)
-            m.addConstr(z3_inlet[0][i] == 1)
         
         for i in range(1,no_ts):
             for j in range(num_tanks):
@@ -899,19 +896,20 @@ def run_gurobi(inp_file, no_ts = 3, num_pipe_seg = 3, num_pump_seg = 5, RELAX = 
                 m.addConstr(H_tanks[i-1][j] >= up_bd - M_tank*(1-z1_inlet[i][j]))
                 m.addConstr(H_tanks[i-1][j] + eps_head <= up_bd + M_tank*z1_inlet[i][j])
                 
+                
                 # II tank level greater than lower lim
                 m.addConstr(H_tanks[i-1][j] >= lo_bd - M_tank*(1-z2_inlet[i][j]) + eps_head)
                 m.addConstr(H_tanks[i-1][j] <= lo_bd + M_tank*z2_inlet[i][j])
-                m.addConstr((z2_inlet[i][j] == 1) >> (z3_inlet[i][j] == 0))    
                 
                 # III tank level between lower and upper lim
-                m.addConstr(y_tanks[i][j] == gp.or_(z1_inlet[i][j],z3_inlet[i][j]), name = "III {}".format(i))                    # is this right?
+                m.addConstr(y_tanks[i][j] == z1_inlet[i][j] - z2_inlet[i][j] + 1, name = "III {}".format(i))                    # is this right?
     
                 # IV putting it all together           
                 m.addConstr(-Q_pipes[i][ind] - M_tank*(1-y_tanks[i][j]) <= 0)
                 m.addConstr(Q_pipes[i][ind] - M_tank*(1-y_tanks[i][j]) <= 0)                                                        ##### try to change M val here
                 m.addConstr((y_tanks[i][j] == 0) >> (u_tanks[i][j] == 0))
                 m.addConstr((y_tanks[i][j] == 1) >> (Q_pipes[i][ind] == 0))
+        
         
         #####################################################################################################################################################################################    
         # VALVE STATUS RULES
@@ -1022,7 +1020,6 @@ def run_gurobi(inp_file, no_ts = 3, num_pipe_seg = 3, num_pump_seg = 5, RELAX = 
         # EVENT_BASED CONTROL RULES
         for i in range(no_ts):
             z1_cont[i] = m.addMVar(ev_pair_count, vtype = GRB.BINARY, name = "z1_cont{}".format(i))
-            z2_cont[i] = m.addMVar(ev_pair_count, vtype = GRB.BINARY, name = "z2_cont{}".format(i))
             z3_cont[i] = m.addMVar(ev_pair_count, vtype = GRB.BINARY, name = "z3_cont{}".format(i))
             z4_cont[i] = m.addMVar(ev_pair_count, vtype = GRB.BINARY, name = "z4_cont{}".format(i))
             y_controls[i] = m.addMVar(ev_pair_count, vtype = GRB.BINARY, name = "y_cont{}".format(i))
@@ -1053,15 +1050,13 @@ def run_gurobi(inp_file, no_ts = 3, num_pipe_seg = 3, num_pump_seg = 5, RELAX = 
                         # I tank level greater than or equal to upper lim
                         m.addConstr(H_tanks[i-1][node_ind] >= upper_lim - M_cont*(1-z1_cont[i][j]))
                         m.addConstr(H_tanks[i-1][node_ind] + eps_cont <= upper_lim + M_cont*z1_cont[i][j]) 
-                        m.addConstr((z1_cont[i][j] == 0) >> (z2_cont[i][j] == 1)) 
-                        m.addConstr((z1_cont[i][j] == 1) >> (z2_cont[i][j] == 0))      # check if this line is necessary, the fewer constraints we add the better        
                         
                         # II tank level greater than lower lim
                         m.addConstr(H_tanks[i-1][node_ind] >= lower_lim - M_cont*(1-z3_cont[i][j]) + eps_cont)
                         m.addConstr(H_tanks[i-1][node_ind] <= lower_lim + M_cont*z3_cont[i][j])
                         
                         # III tank level between lower and upper lim
-                        m.addConstr(z4_cont[i][j] == gp.and_(z2_cont[i][j],z3_cont[i][j]), name = "III {}".format(i))                    # is this right?
+                        m.addConstr(z4_cont[i][j] == z3_cont[i][j] - z1_cont[i][j], name = "III {}".format(i))                    # is this right?
             
                         # IV putting it all together
                         m.addConstr(y_controls[i-1][j] + 2*z1_cont[i][j] + z4_cont[i][j] >= 2 - M_cont_final*(1-y_controls[i][j]), name = "IV a {}".format(i))
@@ -1074,15 +1069,13 @@ def run_gurobi(inp_file, no_ts = 3, num_pipe_seg = 3, num_pump_seg = 5, RELAX = 
                         # I tank level greater than or equal to upper lim
                         m.addConstr(H_tanks[i-1][node_ind] >= upper_lim - M_cont*(1-z1_cont[i][j]))
                         m.addConstr(H_tanks[i-1][node_ind] + eps_cont <= upper_lim + M_cont*z1_cont[i][j]) 
-                        m.addConstr((z1_cont[i][j] == 0) >> (z2_cont[i][j] == 1)) 
-                        m.addConstr((z1_cont[i][j] == 1) >> (z2_cont[i][j] == 0))      # check if this line is necessary, the fewer constraints we add the better        
-                        
+                         
                         # II tank level greater than lower lim
                         m.addConstr(H_tanks[i-1][node_ind] >= lower_lim - M_cont*(1-z3_cont[i][j]) + eps_cont)
                         m.addConstr(H_tanks[i-1][node_ind] <= lower_lim + M_cont*z3_cont[i][j])
                         
                         # III tank level between lower and upper lim
-                        m.addConstr(z4_cont[i][j] == gp.and_(z2_cont[i][j],z3_cont[i][j]), name = "III {}".format(i))                    # is this right?
+                        m.addConstr(z4_cont[i][j] == z3_cont[i][j] - z1_cont[i][j], name = "III {}".format(i))                    # is this right?
             
                         # IV putting it all together
                         m.addConstr(y_controls[i-1][j] + 2*z4_cont[i][j] + 3*(1-z3_cont[i][j]) >= 3 - M_cont_final*(1-y_controls[i][j]), name = "IV a {}".format(i))
