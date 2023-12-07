@@ -2,3 +2,4 @@ wntr==0.4.2
 numpy==1.21.6
 scipy==1.9.1
 gurobipy>=9.5.1
+pandas==1.3.1
