@@ -15,7 +15,7 @@ from textwrap import wrap
 
 no_ts = 24
 
-inp_file = 'Test networks/Net1_casestudy2.inp'
+inp_file = 'Networks/Net1_casestudy2.inp'
 wn = wntr.network.WaterNetworkModel(inp_file)
 sim = wntr.sim.EpanetSimulator(wn)
 results = sim.run_sim()
