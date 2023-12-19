@@ -14,6 +14,8 @@ MILPNet is a Mixed-Integer Linear Programming framework for water distribution s
 
 MILPNet extracts WDS network topology and system boundary conditions (e.g., reservoir heads, junction demands, initial tank level, etc.) from a .INP file of a WDS model using the Python package **WNTR**. The **Gurobi (v 9.5.1) Python API** is used to formulate and solve an extended period optimization problem for WDSs. 
 
+*Checking MILPNet modeling accuracy*
+
 The file :code:`set_up_milpnet.py` builds an optimization problem using the `run_gurobi` function with the following components:
 
 decision variables: heads of junctions and tanks, flow rates of pipes, pumps, GVs, and PRVs, status of pumps, GVs, and tank-links (open/closed), status of PRVs (active/open/closed)
@@ -26,9 +28,21 @@ The non-linear pipe head loss equation (based on the Hazen-Williams equation) an
 
 MILPNet employs Gurobi's in-built piece-wise linearization, indicator, and AND/OR/XOR constraint functionalities to model constraints.
 
-The file :code:`apply_milpnet.py` takes in a .INP file of a WDS network model and the number of time steps in a simulation duration (other inputs to the `run_gurobi` function can be specified as well if desired) and solves the optimization problem. Plots comparing the MILPNet optimization results to EPANET results (through WNTR) are displayed to highlight modeling accuracy.
+The file :code:`apply_milpnet.py` takes in a .INP file of a WDS network model and the number of time steps in a simulation duration (other inputs to the `run_gurobi` function can be specified as well if desired) and solves the feasibility optimization problem. Plots comparing the MILPNet optimization results for junction pressure heads and flows in links to EPANET results (through WNTR) are displayed to highlight modeling accuracy.
 
-The Networks folder includes 8 benchmark networks for testing and validation. The original network names, modifications, and sources are as follows:
+*Demonstrating application of MILPNet to a optimization problem*
+
+Here, we show an example of how MILPNet can be used to build and solve a pump scheduling optimization problem.  The optimization problems involve determining the operational status and flow rates supplied by the pumps to minimize the energy costs under different cost structures while subject to system hydraulics. The file :code:`set_up_pump_scheduling.py` builds an optimization problem using the `run_gurobi` function with the following components:
+
+decision variables: heads of junctions and tanks, flow rates of pipes, pumps, GVs, and PRVs, status of pumps, GVs, and tank-links (open/closed), status of PRVs (active/open/closed), pump switches (binary variables relating pump status between consecutive time steps *t* amd *t+1*)
+
+objective function: minimize cost of pump operation and number of pump switches
+
+constraints: system hydraulics, hydraulic devices, status checks, control rules
+
+The file :code:`solve_for_optimal_pump_scheduling.py` builds and solves the optimization problem for a modified version of network ANET/Net1. We generate plots displaying the MILPNet optimization results for pump flow rates under different cost structures.
+
+The Networks folder includes 8 benchmark networks for testing and validation (+ 1 network to demonstrate the pump scheduling example). The original network names, modifications, and sources are as follows:
 
 .. list-table:: 
    :header-rows: 1
@@ -69,6 +83,10 @@ The Networks folder includes 8 benchmark networks for testing and validation. Th
      - ky6
      - Created a fully reduced model using `MAGNets`_ and replaced power pump with head pump  
      -  `Jolly et al. (2014)`_
+   * - Net1_casestudy2
+     - Net1
+     - Removed control rules, modified demand pattern
+     - `Rossman et al (2020)`_
  
 .. _`Rossman et al (2020)`: https://cfpub.epa.gov/si/si_public_record_Report.cfm?dirEntryId=348882&Lab=CESER
 .. _`Rossman et al (1994)`: https://ascelibrary.org/doi/abs/10.1061/(ASCE)0733-9372(1994)120:4(803)
