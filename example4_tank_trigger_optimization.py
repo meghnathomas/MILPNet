@@ -767,6 +767,7 @@ def run_gurobi(inp_file, no_ts = 3, num_pipe_seg = 3, num_pump_seg = 5,
         node = ev_pair_list[j][1]
         if node in wn.tank_name_list:   # have to write a whole other case if junc
             node_ind = wn.tank_name_list.index(node)
+            tank = wn.get_node(node)
             
             lbounds_upperlim.append(tank.elevation + tank.min_level + 0.5 )         # adding a buffer so the problem is not too tight
             ubounds_upperlim.append(tank.elevation + tank.max_level - 0.5)              # adding a buffer so the problem is not too tight
