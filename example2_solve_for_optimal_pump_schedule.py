@@ -10,7 +10,7 @@ from scipy.optimize import curve_fit
 import re
 import datetime
 from matplotlib import gridspec
-from set_up_pump_scheduling import *
+from example2_set_up_pump_scheduling import *
 from textwrap import wrap
 
 no_ts = 24
