@@ -10,7 +10,7 @@ from scipy.optimize import curve_fit
 import re
 import datetime
 from matplotlib import gridspec
-from build_general_24hr_2hrts_pumpschedule_optimizationproblem import *
+from example3_build_general_24hr_2hrts_pumpschedule_optimizationproblem import *
 from textwrap import wrap
 
 t1 = time.time()
