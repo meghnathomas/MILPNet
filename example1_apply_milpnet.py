@@ -8,7 +8,7 @@ from scipy.optimize import curve_fit
 import re
 import datetime
 from matplotlib import gridspec
-from set_up_milpnet import *
+from example1_set_up_milpnet import *
 from matplotlib.ticker import FormatStrFormatter
 
 #################################### USER INPUTS #########################################################
