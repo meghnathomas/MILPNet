@@ -101,8 +101,7 @@ The Networks folder includes 8 benchmark networks for testing and validation (+ 
 Cite Us
 -------
 
-To cite MILPNet, please use the following publication: `A Mixed-Integer Linear Programming Framework for Optimization of Water Network Operations Problems
-`_
+To cite MILPNet, please use the following publication: `A Mixed-Integer Linear Programming Framework for Optimization of Water Network Operations Problems`_
 
 .. _`A Mixed-Integer Linear Programming Framework for Optimization of Water Network Operations Problems`: https://agupubs.onlinelibrary.wiley.com/doi/10.1029/2023WR034526
 
