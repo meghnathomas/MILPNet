@@ -15,7 +15,7 @@ MILPNet is a Mixed-Integer Linear Programming framework for water distribution s
 MILPNet extracts WDS network topology and system boundary conditions (e.g., reservoir heads, junction demands, initial tank level, etc.) from a .INP file of a WDS model using the Python package **WNTR**. The **Gurobi (v 9.5.1) Python API** is used to formulate and solve an extended period optimization problem for WDSs. 
 
 Checking MILPNet modeling accuracy
-------------
+----------------------------------
 
 The file :code:`example1_set_up_milpnet.py` builds an optimization problem using the `run_gurobi` function with the following components:
 
@@ -32,7 +32,7 @@ MILPNet employs Gurobi's in-built piece-wise linearization, indicator, and AND/O
 The file :code:`example1_apply_milpnet.py` takes in a .INP file of a WDS network model and the number of time steps in a simulation duration (other inputs to the `run_gurobi` function can be specified as well if desired) and solves the feasibility optimization problem. Plots comparing the MILPNet optimization results for junction pressure heads and flows in links to EPANET results (through WNTR) are displayed to highlight modeling accuracy.
 
 Demonstrating application of MILPNet to a optimization problem
-------------
+--------------------------------------------------------------
 
 Here, we show an example of how MILPNet can be used to build and solve a pump scheduling optimization problem.  The optimization problems involve determining the operational status and flow rates supplied by the pumps to minimize the energy costs under different cost structures while subject to system hydraulics. The file :code:`example2_set_up_pump_scheduling.py` builds an optimization problem using the `run_gurobi` function with the following components:
 
